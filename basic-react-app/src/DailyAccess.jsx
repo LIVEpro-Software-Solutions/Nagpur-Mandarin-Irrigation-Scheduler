@@ -30,6 +30,8 @@ const DailyAccess = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#828E64] font-sans px-4 py-8">
       <div className="bg-[#D0D9CD] p-8 rounded-lg shadow-md w-full max-w-5xl text-black">
+        <h1 className="text-3xl font-bold text-green-800 mb-2 text-center">Nagpur Mandarin</h1>
+        <h2 className="text-lg text-gray-700 mb-6 font-normal text-center">Irrigation Scheduler</h2>
         <h2 className="text-xl text-center mb-4 font-normal text-gray-700">Welcome Satwik Shirpurwar</h2>
         <h3 className="text-2xl font-bold text-left mb-6 text-green-900">Daily Access</h3>
 
