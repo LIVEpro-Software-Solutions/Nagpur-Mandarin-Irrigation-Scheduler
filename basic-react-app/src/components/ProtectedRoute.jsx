@@ -9,4 +9,3 @@ const ProtectedRoute = () => {
 };
 
 export default ProtectedRoute;
-s

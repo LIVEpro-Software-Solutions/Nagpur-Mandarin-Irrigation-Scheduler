@@ -1,7 +1,8 @@
 //import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from '/src/app/store';
+import store from '/src/app/store.js';
+import ProtectedRoute from '/src/components/ProtectedRoute.jsx';
 import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
 import Dashboard from './Dashboard';
@@ -12,7 +13,7 @@ import SoilInfo from './soilinfo';
 import CropInfo from './CropInfo';
 import IrrigationInfo from './IrrigationInfo';
 //import { Provider } from 'react-redux';
-import ProtectedRoute from './components/ProtectedRoute';
+
 
 function App() {
   return (
