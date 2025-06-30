@@ -28,7 +28,7 @@ const Dashboard = () => {
           <button onClick={() => navigate('/daily-access')} className="w-full bg-orange-600 hover:bg-orange-700 py-4 text-lg rounded font-bold text-white">
             Daily Access
           </button>
-          <button className="w-full bg-orange-600 hover:bg-orange-700 py-4 text-lg rounded font-bold text-white">
+          <button onClick={() => navigate('/')} className="w-full bg-orange-600 hover:bg-orange-700 py-4 text-lg rounded font-bold text-white">
             Logout
           </button>
         </div>
