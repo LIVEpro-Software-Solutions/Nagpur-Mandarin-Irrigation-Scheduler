@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import authService from '/src/services/auth.js';
+import axios from '/src/utils/axiosConfig';
+import { useAuth } from '/src/context/AuthContext';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
-    email: '', // Changed from username to email to match backend
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const { email, password } = formData;
 
@@ -22,59 +25,76 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+    setLoading(true);
+
     try {
-      await authService.login({ email, password });
-      navigate('/dashboard'); // Redirect to dashboard after login
+      // Use the auth context login function
+      await login({ email, password });
+      navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.msg || 'Login failed');
+      console.error('Login error:', err);
+      setError(err.response?.data?.msg || 'Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#828E64] font-sans">
-      <div className="bg-[#D0D9CD] p-8 rounded-lg shadow-md w-full max-w-md text-center mx-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#828E64] font-sans px-4 py-8">
+      <div className="bg-[#D0D9CD] p-8 rounded-lg shadow-md w-full max-w-md text-center">
         <h1 className="text-3xl font-bold text-green-800 mb-2">Nagpur Mandarin</h1>
         <h2 className="text-lg text-gray-700 mb-6 font-normal">Irrigation Scheduler</h2>
 
-        {error && <div className="mb-4 text-red-600">{error}</div>}
+        {error && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6 relative flex justify-center">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="text-left">
+            <label className="block text-green-800 font-semibold mb-1">Email</label>
             <input
               type="email"
               name="email"
               value={email}
               onChange={handleChange}
-              placeholder="Email"
+              placeholder="Enter your email"
               required
-              className="w-3/4 pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27555%27%3E%3Cpath d=%27M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%27/%3E%3C/svg%3E')] bg-no-repeat bg-[10px_center] bg-[20px_20px]"
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
-          <div className="mb-6 relative flex justify-center">
+          <div className="text-left">
+            <label className="block text-green-800 font-semibold mb-1">Password</label>
             <input
               type="password"
               name="password"
               value={password}
               onChange={handleChange}
-              placeholder="Password"
+              placeholder="Enter your password"
               required
-              className="w-3/4 pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27555%27%3E%3Cpath d=%27M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z%27/%3E%3C/svg%3E')] bg-no-repeat bg-[10px_center] bg-[20px_20px]"
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
           <button
             type="submit"
-            className="w-3/4 py-2 bg-green-800 hover:bg-green-900 text-white rounded font-semibold transition-colors duration-300"
+            disabled={loading}
+            className={`w-full py-2 bg-green-800 text-white rounded font-semibold transition-colors duration-300 ${
+              loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-900'
+            }`}
           >
-            Sign In
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
 
         <div className="mt-6 text-gray-600">
           <p>Don't have an account?</p>
-          <Link to="/register" className="text-green-800 font-bold hover:underline">
+          <Link 
+            to="/register" 
+            className="text-green-800 font-bold hover:underline"
+          >
             Register
           </Link>
         </div>

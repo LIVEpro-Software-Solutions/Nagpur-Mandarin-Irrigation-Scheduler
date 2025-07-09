@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from '/src/utils/axiosConfig.js'; // Your configured Axios instance
+import { useAuth } from '/src/context/AuthContext.jsx';
 
 const FarmRegistration = () => {
   const navigate = useNavigate();
+  const { user } = useAuth(); // Get user and token from context
 
   const [farmName, setFarmName] = useState('');
   const [latitude, setLatitude] = useState('');
@@ -22,10 +25,46 @@ const FarmRegistration = () => {
     }
   }, [length, width]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({ farmName, latitude, longitude, elevation, length, width, area });
+// FarmRegistration.jsx - Update handleSubmit
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Basic client-side validation
+  if (!farmName || !latitude || !longitude || !elevation || !length || !width) {
+    alert('Please fill all required fields');
+    return;
+  }
+
+  const farmData = {
+    farmName,
+    location: {
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude),
+      elevation: parseFloat(elevation)
+    },
+    area: {
+      length: parseFloat(length),
+      width: parseFloat(width),
+      totalHectares: parseFloat(area)
+    },
+    soil: {}, // Initialize empty soil object
+    crop: {}, // Initialize empty crop object
+    irrigation: {} // Initialize empty irrigation object
   };
+
+  try {
+    await axios.post('/farms', farmData, {
+      headers: {
+        'x-auth-token': user?.token
+      }
+    });
+    navigate('/soil-info');
+  } catch (err) {
+    console.error('Error:', err.response?.data || err.message);
+    alert(`Error: ${err.response?.data?.msg || 'Failed to save farm'}`);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#828E64] font-sans px-4 py-8">
@@ -44,6 +83,7 @@ const FarmRegistration = () => {
               value={farmName}
               onChange={(e) => setFarmName(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
             />
           </div>
 
@@ -55,6 +95,7 @@ const FarmRegistration = () => {
               value={latitude}
               onChange={(e) => setLatitude(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
             />
           </div>
 
@@ -66,6 +107,7 @@ const FarmRegistration = () => {
               value={longitude}
               onChange={(e) => setLongitude(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
             />
           </div>
 
@@ -77,6 +119,7 @@ const FarmRegistration = () => {
               value={elevation}
               onChange={(e) => setElevation(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
             />
           </div>
 
@@ -89,6 +132,7 @@ const FarmRegistration = () => {
                 value={length}
                 onChange={(e) => setLength(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
               />
               <input
                 type="text"
@@ -96,6 +140,7 @@ const FarmRegistration = () => {
                 value={width}
                 onChange={(e) => setWidth(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
               />
               <input
                 type="text"
@@ -116,7 +161,6 @@ const FarmRegistration = () => {
             </button>
             <button
               type="submit"
-              onClick={() => navigate('/soil-info')}
               className="bg-green-800 hover:bg-green-900 py-3 rounded text-white font-bold w-full"
             >
               Save & Next
