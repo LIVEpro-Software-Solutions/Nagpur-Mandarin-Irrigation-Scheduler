@@ -1,4 +1,5 @@
 {
-  "jwtSecret": "yourSuperSecretKey",
-  "mongoURI": "mongodb://localhost:27017/anshulaj21"
+  "mongoURI": "mongodb://localhost:27017/anshulaj21",
+  "jwtSecret": "your_jwt_secret",
+  "NODE_ENV": "development"
 }
