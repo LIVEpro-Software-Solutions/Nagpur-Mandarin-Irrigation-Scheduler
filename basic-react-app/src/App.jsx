@@ -8,12 +8,12 @@ import ProtectedRoute from '/src/components/ProtectedRoute.jsx';
 import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
 import Dashboard from './Dashboard';
-import FarmRegistration from './farmregistration';
+import FarmRegistration from './FarmRegistration';
 import DailyAccess from './DailyAccess';
-import SoilInfo from './soilinfo';
+import SoilInfo from './SoilInfo';
 import CropInfo from './CropInfo';
 import IrrigationInfo from './IrrigationInfo';
-import ViewEdit from './viewedit';
+import ViewEdit from './Viewedit';
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 
-        <Route path="/farmregistration" element={<FarmRegistration />} />
+        <Route path="/farm-registration" element={<FarmRegistration />} />
         <Route path="/daily-access" element={<DailyAccess />} />
         <Route path="/view-edit" element={<ViewEdit />} />
         <Route path="/soil-info" element={<SoilInfo />} />
