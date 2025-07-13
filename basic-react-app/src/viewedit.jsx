@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '/src/context/AuthContext.jsx';
+import LogoHeader from './LogoHeader';
 
 const ViewEdit = () => {
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ const ViewEdit = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#828E64] font-sans">
       <div className="bg-[#D0D9CD] p-12 rounded-xl shadow-lg w-full max-w-3xl text-center mx-4">
+        <LogoHeader/>
         <h1 className="text-4xl font-bold text-green-800 mb-2">Farm Management</h1>
         <p className="text-gray-800 text-xl mb-8 font-medium">Welcome {user?.name || 'User'}</p>
 
